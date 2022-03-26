@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+function create_project_folder (){
+  echo c
+  mkdir "$(pwd)/$1"
+}
+
+function validate_tool (){
+  if [[ $1 != "curl"  ]] && [[ $1 != "wget" ]] && [[ $1 != "httpie"  ]]
+  then
+    echo "The tool you have specified is not supported by ain"
+    echo "ain supports: curl, wget, httpie"
+    echo "You inputted: $1"
+    exit1
+  fi
+}
+
+function ask_confirmation (){
+  while true
+  do
+    read -n 1 -p "Are you sure? (y/n)" confirm
+    
+    if [[ $confirm == "y"  ]]
+    then
+      break
+    elif [[ $confirm == "n" ]]
+    then
+      exit 1
+    fi
+    echo ""
+  done
+}
+
+function create_folder_and_feedback (){
+  mkdir $1
+  echo "Created folder: $1"
+}
+
+
+while getopts n:p:t flag
+do
+    case "${flag}" in
+        n) project_name=${OPTARG};;
+        p) dev_port=${OPTARG};;
+        r) tool=${OPTARG};;
+    esac
+done
+
+if [[ -z "$project_name" ]]
+then
+  echo "Missing Project Name"
+  exit 1
+fi
+
+if [[ -z "$dev_port" ]]
+then
+  dev_port=8080
+  echo "Setting Port to default: ${dev_port}"
+fi
+
+if [[ -z "$tool" ]]
+then
+  tool="httpie"
+  echo "Settings Tool to default: ${tool}"
+fi
+validate_tool $tool
+
+echo "***** CONFIGS ******"
+echo ""
+echo "Project Name: ${project_name}"
+echo "Port: ${dev_port}"
+echo "Tool: ${tool}"
+echo ""
+echo "***** CONFIGS ******"
+
+ask_confirmation
+
+create_project_folder $project_name
+
+create_folder_and_feedback "${project_name}/base/"
+create_folder_and_feedback "${project_name}/environment/"
+create_folder_and_feedback "${project_name}/routes/"
+
+cp "templates/local.ain.template" "${project_name}/base/local.ain"
+echo "PORT=${dev_port}" > "${project_name}/env/local.env"
