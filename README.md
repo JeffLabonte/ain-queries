@@ -2,7 +2,7 @@
 
 This repository is a template for anybody who wants to have a HTTP client straight in the terminal. 
 
-I have found through [this article](https://golangexample.com/an-http-api-client-for-the-terminal/) amd figured, I could create something that would make it easier to adopt.
+I have found through [this article](https://golangexample.com/an-http-api-client-for-the-terminal/) and figured, I could create something that would make it easier to adopt.
 
 ### Requirements:
 
