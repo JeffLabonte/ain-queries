@@ -1,0 +1,11 @@
+[Host]
+http://localhost:8000
+
+[Headers]
+Content-Type: application/json
+
+[Backend]
+httpie
+
+[BackendOptions]
+--pretty=all
