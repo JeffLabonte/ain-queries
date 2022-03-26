@@ -1,0 +1,25 @@
+{
+  "entries": {
+    "tap": {
+      "jonaslu/tools": {
+        "revision": "9fcd5bdd449630b53158dd30efc539eb1065da52"
+      }
+    },
+    "brew": {
+      "ain": {
+        "version": "1.2.2",
+        "bottle": false
+      }
+    }
+  },
+  "system": {
+    "linux": {
+      "Debian GNU/Linux 11 (bullseye) (bullseye)": {
+        "HOMEBREW_VERSION": "3.4.3",
+        "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
+        "Homebrew/linuxbrew-core": "be8fcb204e2068185ffe09ecf651a071ea958284",
+        "GCC": "10.2.1"
+      }
+    }
+  }
+}
