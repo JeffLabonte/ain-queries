@@ -147,9 +147,9 @@
   "system": {
     "linux": {
       "Debian GNU/Linux 11 (bullseye) (bullseye)": {
-        "HOMEBREW_VERSION": "3.4.3",
+        "HOMEBREW_VERSION": "3.4.4",
         "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
-        "Homebrew/linuxbrew-core": "946389b1eec82e348221c2505adcd102616b1719",
+        "Homebrew/linuxbrew-core": "af93db547c684dcf598bcabbc616134fbaecee11",
         "GCC": "10.2.1"
       }
     }
