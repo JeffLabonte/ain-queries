@@ -1,0 +1,14 @@
+[Host]
+http://localhost:{{ dev_port }}
+
+[Headers]
+Content-Type: application/json
+
+[Backend]
+{{ backend_tool }}
+
+[BackendOptions]
+{% for backend_option in backend_options %}
+  {{ backend_optons }}
+{% endfor %}
+--pretty=all
