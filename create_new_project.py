@@ -62,10 +62,16 @@ def validate_input(arguments):
 
 if __name__ == "__main__":
     arguments = create_cli_arguments().parse_args()
+    validate_input(arguments=arguments)
 
     project_path = create_project(project_name=arguments.project_name)
 
+    backend_tool = arguments.tool
+
     environment_varables = {
         "backend_tool": arguments.tool,
+        "backend_options": BACKEND_TOOL_OPTIONS[backend_tool],
         "http_port": arguments.dev_port,
     }
+
+    copy_templates(env_variables=environment_varables, project_path=project_path)
