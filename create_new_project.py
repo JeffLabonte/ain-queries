@@ -36,7 +36,7 @@ def write_file(file_path: str, content: str) -> None:
 
 def render_template(file_path: str, render_variables: dict) -> str:
     template_content = read_file(file_path=file_path)
-    template_object = Template(template_content)
+    template_object = Template(template_content.decode("utf-8"))
     return template_object.render(**render_variables)
 
 
