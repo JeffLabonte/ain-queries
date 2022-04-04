@@ -47,6 +47,6 @@ if __name__ == "__main__":
     project_path = create_project(project_name=arguments.project_name)
 
     environment_varables = {
-        "tool": arguments.tool,
+        "backend_tool": arguments.tool,
         "http_port": arguments.dev_port,
     }
