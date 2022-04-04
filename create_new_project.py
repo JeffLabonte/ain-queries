@@ -54,6 +54,12 @@ def create_cli_arguments():
     return parser
 
 
+def validate_input(arguments):
+    backend_tool = arguments.tool
+    if backend_tool not in ["httpie", "curl", "wget"]:
+        raise RuntimeError("ain supports \"httpie\", \"curl\", and \"wget\"")
+
+
 if __name__ == "__main__":
     arguments = create_cli_arguments().parse_args()
 
