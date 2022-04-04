@@ -24,8 +24,9 @@ def create_project(project_name: str) -> str:
     return project_path
 
 
-def read_file(file_path: str) -> str:
-    return open(file_path, mode="rb").read()
+def read_file(file_path: str) -> bytes:
+    with open(file_path, mode="rb") as fs:
+        return fs.read()
 
 
 def write_file(file_path: str, content: bytes) -> None:
