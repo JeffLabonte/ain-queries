@@ -41,7 +41,9 @@ def render_template(file_path: str, render_variables: dict) -> str:
 
 
 def copy_templates(env_variables: dict, project_path: str):
-    rendered_local_ain = render_template("templates/local.ain.j2")
+    rendered_local_ain = render_template("templates/local.ain.j2", render_variables=env_variables)
+    local_ain_path = Path.joinpath(project_path, "local.ain")
+    write_file(local_ain_path, rendered_local_ain)
 
 
 def create_cli_arguments():
