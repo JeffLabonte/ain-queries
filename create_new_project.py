@@ -13,7 +13,7 @@ BACKEND_TOOL_OPTIONS = {
 }
 
 
-def create_project(project_name: str) -> str:
+def create_project(project_name: str) -> Path:
     project_path = Path.joinpath(Path.cwd(), project_name)
     if not project_path.exists():
         print("")
