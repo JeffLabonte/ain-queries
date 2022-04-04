@@ -27,10 +27,20 @@ def create_project(project_name: str) -> str:
 def read_file(file_path: str) -> str:
     return open(file_path, mode="rb").read()
 
+
+def write_file(file_path: str, content: bytes) -> None:
+    with open(file_path, "wb+") as f:
+        f.write(content)
+
+
+def render_template(file_path: str, render_variables: dict) -> str:
+    template_content = read_file(file_path=file_path)
+    template_object = Template(template_content)
+    return template_object.render(**render_variables)
+
+
 def copy_templates(env_variables: dict, project_path: str):
-    local_ain_content = read_file("templates/local.ain.j2")
-    local_ain_template = Template(local_ain_content)
-    local_ain_template.render(**env_variables)
+    rendered_local_ain = render_template("templates/local.ain.j2")
 
 
 def create_cli_arguments():
