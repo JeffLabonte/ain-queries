@@ -149,7 +149,7 @@
       "Debian GNU/Linux 11 (bullseye) (bullseye)": {
         "HOMEBREW_VERSION": "3.4.4",
         "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
-        "Homebrew/linuxbrew-core": "af93db547c684dcf598bcabbc616134fbaecee11",
+        "Homebrew/linuxbrew-core": "fc7dcbb34a971fbdc5b9824a8f894e4b9c88b4af",
         "GCC": "10.2.1"
       }
     }
