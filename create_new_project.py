@@ -29,8 +29,8 @@ def read_file(file_path: str) -> bytes:
         return fs.read()
 
 
-def write_file(file_path: str, content: bytes) -> None:
-    with open(file_path, "wb+") as f:
+def write_file(file_path: str, content: str) -> None:
+    with open(file_path, "w+") as f:
         f.write(content)
 
 
