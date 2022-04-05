@@ -1,85 +1,77 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
+import os
 
-function create_project_folder (){
-  echo c
-  mkdir "$(pwd)/$1"
-}
+from argparse import ArgumentParser
+from pathlib import Path
 
-function validate_tool (){
-  if [[ $1 != "curl"  ]] && [[ $1 != "wget" ]] && [[ $1 != "httpie"  ]]
-  then
-    echo "The tool you have specified is not supported by ain"
-    echo "ain supports: curl, wget, httpie"
-    echo "You inputted: $1"
-    exit1
-  fi
-}
+from jinja2 import Template
 
-function ask_confirmation (){
-  while true
-  do
-    read -n 1 -p "Are you sure? (y/n)" confirm
-    
-    if [[ $confirm == "y"  ]]
-    then
-      break
-    elif [[ $confirm == "n" ]]
-    then
-      exit 1
-    fi
-    echo ""
-  done
-}
-
-function create_folder_and_feedback (){
-  mkdir $1
-  echo "Created folder: $1"
+BACKEND_TOOL_OPTIONS = {
+    "httpie": [
+        "--pretty=all",
+    ],
 }
 
 
-while getopts n:p:t flag
-do
-    case "${flag}" in
-        n) project_name=${OPTARG};;
-        p) dev_port=${OPTARG};;
-        r) tool=${OPTARG};;
-    esac
-done
+def create_project(project_name: str) -> Path:
+    project_path = Path.joinpath(Path.cwd(), project_name)
+    if not project_path.exists():
+        print("")
+        os.mkdir(project_name)
+    else:
+        print(f"Project folder has already been created: {project_path}")
 
-if [[ -z "$project_name" ]]
-then
-  echo "Missing Project Name"
-  exit 1
-fi
+    return project_path
 
-if [[ -z "$dev_port" ]]
-then
-  dev_port=8080
-  echo "Setting Port to default: ${dev_port}"
-fi
 
-if [[ -z "$tool" ]]
-then
-  tool="httpie"
-  echo "Settings Tool to default: ${tool}"
-fi
-validate_tool $tool
+def read_file(file_path: str) -> bytes:
+    with open(file_path, mode="rb") as fs:
+        return fs.read()
 
-echo "***** CONFIGS ******"
-echo ""
-echo "Project Name: ${project_name}"
-echo "Port: ${dev_port}"
-echo "Tool: ${tool}"
-echo ""
-echo "***** CONFIGS ******"
 
-ask_confirmation
+def write_file(file_path: str, content: str) -> None:
+    with open(file_path, "w+") as f:
+        f.write(content)
 
-create_project_folder $project_name
 
-create_folder_and_feedback "${project_name}/base/"
-create_folder_and_feedback "${project_name}/environment/"
-create_folder_and_feedback "${project_name}/routes/"
+def render_template(file_path: str, render_variables: dict) -> str:
+    template_content = read_file(file_path=file_path)
+    template_object = Template(template_content.decode("utf-8"))
+    return template_object.render(**render_variables)
 
-cp "templates/local.ain.template" "${project_name}/base/local.ain"
-echo "PORT=${dev_port}" > "${project_name}/env/local.env"
+
+def copy_templates(env_variables: dict, project_path: str):
+    rendered_local_ain = render_template("templates/local.ain.j2", render_variables=env_variables)
+    local_ain_path = Path.joinpath(project_path, "local.ain")
+    write_file(local_ain_path, rendered_local_ain)
+
+
+def create_cli_arguments():
+    parser = ArgumentParser()
+    parser.add_argument("--project_name", help="The name of the project you want to create")
+    parser.add_argument("--dev_port", help="The port used for the dev template", default=8000)
+    parser.add_argument("--tool", help="You can choose between: curl, wget, httpie", default="httpie")
+    return parser
+
+
+def validate_input(arguments):
+    backend_tool = arguments.tool
+    if backend_tool not in ["httpie", "curl", "wget"]:
+        raise RuntimeError("ain supports \"httpie\", \"curl\", and \"wget\"")
+
+
+if __name__ == "__main__":
+    arguments = create_cli_arguments().parse_args()
+    validate_input(arguments=arguments)
+
+    project_path = create_project(project_name=arguments.project_name)
+
+    backend_tool = arguments.tool
+
+    environment_varables = {
+        "backend_tool": arguments.tool,
+        "backend_options": BACKEND_TOOL_OPTIONS[backend_tool],
+        "http_port": arguments.dev_port,
+    }
+
+    copy_templates(env_variables=environment_varables, project_path=project_path)
