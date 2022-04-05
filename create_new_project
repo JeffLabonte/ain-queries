@@ -3,6 +3,7 @@ import os
 
 from argparse import ArgumentParser
 from pathlib import Path
+from typing import Optional
 
 from jinja2 import Template
 
@@ -16,10 +17,10 @@ BACKEND_TOOL_OPTIONS = {
 def create_project(project_name: str) -> Path:
     project_path = Path.joinpath(Path.cwd(), project_name)
     if not project_path.exists():
-        print("")
+        print(f"\nCreating folder for new project: {project_name}\n")
         os.mkdir(project_name)
     else:
-        print(f"Project folder has already been created: {project_path}")
+        print(f"\nProject folder has already been created: {project_path}\n")
 
     return project_path
 
@@ -29,21 +30,22 @@ def read_file(file_path: str) -> bytes:
         return fs.read()
 
 
-def write_file(file_path: str, content: str) -> None:
+def write_file(file_path: Path, content: str) -> None:
     with open(file_path, "w+") as f:
         f.write(content)
 
 
-def render_template(file_path: str, render_variables: dict) -> str:
+def render_template(file_path: str, render_variables: dict) -> Optional[str]:
     template_content = read_file(file_path=file_path)
     template_object = Template(template_content.decode("utf-8"))
     return template_object.render(**render_variables)
 
 
-def copy_templates(env_variables: dict, project_path: str):
+def copy_templates(env_variables: dict, project_path: str) -> None:
     rendered_local_ain = render_template("templates/local.ain.j2", render_variables=env_variables)
     local_ain_path = Path.joinpath(project_path, "local.ain")
-    write_file(local_ain_path, rendered_local_ain)
+    write_file(local_ain_path, str(rendered_local_ain))
+    print(f"\nCreated: {local_ain_path} from template\n")
 
 
 def create_cli_arguments():
