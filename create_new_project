@@ -19,6 +19,7 @@ def create_project(project_name: str) -> Path:
     if not project_path.exists():
         print(f"\nCreating folder for new project: {project_name}\n")
         os.mkdir(project_name)
+        os.mkdir(Path().joinpath(project_name, "routes"))
     else:
         print(f"\nProject folder has already been created: {project_path}\n")
 
@@ -43,7 +44,7 @@ def render_template(file_path: str, render_variables: dict) -> Optional[str]:
 
 def copy_templates(env_variables: dict, project_path: str) -> None:
     rendered_local_ain = render_template("templates/local.ain.j2", render_variables=env_variables)
-    local_ain_path = Path.joinpath(project_path, "local.ain")
+    local_ain_path = Path().joinpath(project_path, "local.ain")
     write_file(local_ain_path, str(rendered_local_ain))
     print(f"\nCreated: {local_ain_path} from template\n")
 
